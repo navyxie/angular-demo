@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head id="head">
+    <meta charset="UTF-8" />
+    <meta name="viewport" id="chaoBaiDa" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="Description" content="爱米宝" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/common.css">
+    <link rel="stylesheet" type="text/css" href="stylesheets/login.css">
+    <script type="text/javascript" src="libs/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="libs/angular.min.js"></script> 
+    <script type="text/javascript" src="javascripts/login/app.js"></script> 
+    <script type="text/javascript" src="javascripts/login/controllers/login.js"></script>    
+</head>
+<body ng-app="loginApp">
+	<div id="container">
+		<div id="header_bg">
+			<img ng-src="images/login_header.png" />
+		</div>
+		<div id="todayGetLimit">
+			<h4>今日可领额度</h4>
+			<div id="processBarContainer">
+				<div id="processBar">
+					<div id="currentProcess" style="width:{{currentProcess}}"></div>
+				</div>
+				<div id="leftPercent">{{leftPercent}}</div>
+			</div>
+		</div>
+		<div id="getBtnContainer" ng-controller="LoginCtrl">
+			<div id="getBtn" ng-click="showLoginDialog()">点击领取</div>
+		</div>
+		<ul id="getList">
+			<li>张先生于 10:55 领取了500元</li>
+			<li>张先生于 10:55 领取了100元</li>
+			<li>张先生于 10:55 领取了200元</li>
+			<li>张先生于 10:55 领取了300元</li>
+		</ul>
+	</div>
+	<div ng-show="dialogState" id="loginContainer" ng-include src=" 'views/dialog.html' " ng-click="closeDialog()"></div>
+</body>
+</html>

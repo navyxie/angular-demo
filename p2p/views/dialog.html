@@ -1,0 +1,7 @@
+<div id="loginDialog" ng-click="cancelBubble($event)" ng-controller="LoginDialogCtrl">
+	<h4 class="loginTip loginTip1">为了保证你的财产安全</h4>
+	<h4 class="loginTip loginTip2">请设置好个人的账号和密码</h4>
+	<div class="userName"><input ng-model="userName" type="text" id="userName" placeholder="账号" required="required"  ng-trim="true" ng-blur="checkName()" /><br /><span class="nameTip inputTip" ng-hide="userNameTip">账号名已存在</span></div>
+	<div class="userPSW"><input ng-model="userPassword" type="password" id="userPassword" placeholder="密码" ng-trim="true" required="required" /><br /><span class="pswTip inputTip" ng-hide="pswTip">密码长度6-12字符</span></div>
+	<div class="sureBtnContainer"><a href="javascript:;" id="sureBtn" ng-click="register()">确认</a></div>
+</div>

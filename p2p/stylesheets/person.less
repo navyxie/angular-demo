@@ -1,0 +1,212 @@
+@bgColor:#EAEAEA;
+html,body{
+	max-width:640px; 
+	margin: auto;
+	background: @bgColor;
+}
+@textColor:#929292;
+#container{
+	padding: 10px;
+}
+#personContainer{
+	.container1{
+		padding: 10px 0;
+	}
+	.openIncomeBtn{
+		float: right;
+		color: #507ED4;
+	}
+	.totalEarn{
+		color: #F35842;
+	}
+	.container2{
+		background: #EB6955;
+		overflow: hidden;
+		position: relative;
+		border-radius: 5px;
+		color: #fff;
+		h4{
+			height: 60px;
+			line-height: 60px;
+			font-size: 20px;
+		}
+		.earning{
+			height: 80px;
+			line-height: 80px;
+			font-size: 30px;
+			font-weight: bold;
+		}
+		.tomorrowEarnContainer{
+			width: 40%;
+			float: right;
+			text-align: center;
+		}
+		.totalEarnContainer{
+			width: 60%;
+			text-align: center;
+		}
+		.line{
+			position: absolute;		
+			background: #F19384;
+		}
+		.line1{
+			width: 2px;
+			height:80%;
+			top:10%;
+			left: 60%; 
+		}
+		.line2{
+			width: 80%;
+			top:45%;
+			left: 10%;
+			height: 2px;
+		}
+	}
+}
+.divBlock{
+	.headTitle{
+		margin-bottom: 30px;
+		text-align: center;
+		border-bottom: 1px dashed @textColor;
+		position: relative;
+		height: 40px;
+		span{
+			display: inline-block;
+			background: @bgColor;
+			width: 100px;
+			font-size: 20px;
+			color: @textColor;
+			position: absolute;
+			top:30px;
+			left: 50%;
+			margin-left: -50px;
+			text-align: center;
+		}
+	}
+}
+#signIn{
+	.headTitle{	
+		span{
+			width: 200px;
+			margin-left: -100px;
+		}
+	}
+}
+.taskList{
+	overflow:hidden;
+	border-radius: 5px;
+	margin-top: 10px;
+	background-color: rgb( 255, 255, 255 );
+  	box-shadow: 4px 6.928px 0px 0px rgb( 231, 231, 231 );
+	.col{
+		display: inline-block;
+		float: left;
+		text-align: center;
+		height: 50px;
+		line-height: 50px;
+		font-size: 18px;
+	}
+	.col1,.col3{
+		width: 20%;
+	}
+	.col2{
+		width: 60%;
+	}
+	.col{
+		color: #7c7c7c;
+	}
+	.col2{
+		color: #919191;
+		em{
+			color: #f7c913;
+		}
+	}
+	.col3{
+		background: #5dcac4;
+		color: #fff;
+	}
+}
+.signTaskList{
+	border: 1px solid #7c7c7c;
+	padding: 10px 0;
+	overflow:hidden;
+	.list{
+		display: inline-block;
+		width: 16%;
+		border-right: 1px solid #9D9D9D;
+		float: left;
+		span{
+			display: inline-block;
+			width: 100%;
+			text-align: center;
+			font-weight: bold;
+		}
+		.date{
+			color: #5c5958;
+		}
+		.money{
+			color: #dfab0d;
+		}
+		.signBtn{
+			background: #eb6955;
+			color: #fff;
+			border-radius: 5px;
+		}
+		.listContent{
+			padding: 5px 0;
+		}
+	}
+	.signList{
+		border-right: none;
+		margin-left: 1.5%;
+	}
+}
+.recordList{
+	li{
+		line-height: 170%;
+		width: 100%;
+		text-overflow:ellipsis;
+		color:#939393;
+		font-size: 16px;
+		span{
+			color: #eb6955;
+		}
+	}
+}
+#getCash{
+	overflow:hidden;
+	margin: 30px 0 30px 0;
+	.getCashText,.getCashBtnContent{
+		color: #919191;
+	}
+	.getCashBtnContent{
+		float: right;
+		width: 100px;
+		height: 50px;
+		line-height: 50px;
+		text-align: center;
+		color: #fff;
+		font-size: 20px;
+		font-weight: bold;
+		border-radius: 5px;
+	}
+	.disableClick{
+		background: #d4d4d4;
+	}
+	.enableClick{
+		background: #5dcac4;
+	}
+	.getCashText{
+		float: right;
+		width: 200px;
+		text-align: center;
+		font-size: 18px;
+		p{
+			height: 25px;
+			line-height: 25px;
+			span{
+				color: #eb6955;
+			}
+		}
+	}
+}

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head id="head">
+    <meta charset="UTF-8" />
+    <meta name="viewport" id="chaoBaiDa" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="Description" content="爱米宝" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/common.css">
+    <link rel="stylesheet" type="text/css" href="stylesheets/person.css">
+    <script type="text/javascript" src="libs/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="libs/angular.min.js"></script> 
+    <script type="text/javascript" src="javascripts/person/app.js"></script> 
+    <script type="text/javascript" src="javascripts/person/controllers/person.js"></script>    
+</head>
+<body ng-app="personApp">
+	<div id="container">
+		<div id="personContainer" ng-controller="PersonCtrl">
+			<div class="container1"><a class="openIncomeBtn" href="javascript:;" ng-click="openIncomeDialog()">如何提高收益？</a><span class="personSumary">{{personData.username}}的总资产 : <strong class="totalEarn">{{personData.totalAsset}}</strong>元</span></div>
+			<div class="container2">
+				<div class="tomorrowEarnContainer">
+					<h4>昨日收益(元)</h4>
+					<div class="yesterdayEarning earning">+{{personData.yesterdayEaring}}</div>
+				</div>
+				<div class="totalEarnContainer">
+					<h4>累计收益(元)</h4>
+					<div class="sumEarning earning">{{personData.sumEarning}}</div>
+				</div>
+				<div class="line line1"></div>
+				<div class="line line2"></div>
+			</div>
+		</div>
+		<div id="newHandReward" class="divBlock" ng-controller="RewardCtrl">
+			<h3 class="headTitle"><span>新手奖励</span></h3>
+			<div class="taskList taskListShare">
+				<span class="col col1">任务一</span>
+				<span class="col col2"><em>&yen;100</em>分享后奖励</span>
+				<span class="col col3" ng-click="getShareCoin()">领取</span>
+			</div>
+			<div class="taskList taskListSign">
+				<span class="col col1">任务二</span>
+				<span class="col col2"><em>&yen;100</em>签到后奖励</span>
+				<span class="col col3" ng-click="getSignCoin()">领取</span>
+			</div>
+		</div>
+		<div id="signIn" class="divBlock" ng-controller="TaskListCtrl">
+			<h3 class="headTitle"><span>连续签到，天天领</span></h3>
+			<div class="signTaskList">
+				<ul>
+					<li ng-repeat="task in dateList" class="list">
+						<div class="listContent">
+							<span class="date">{{task.date}}</span>
+							<span class="money">{{task.money}}</span>
+						</div>
+					</li>
+					<li class="list signList" ng-click="signHander()">
+						<div class="listContent signBtn">
+							<span class="signBg">点击</span>
+							<span class="signBg">签到</span>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div id="profitRecord" class="divBlock" ng-controller="RewardCtrl">
+			<div id="getCash">
+				<div class="getCashBtnContent disableClick"><span ng-click="getCashBtn()">提现</span></div>
+				<div class="getCashText">
+					<p>你的收益为<span>{{cashVal}}元</span></p>
+					<p>收益满<span>3元</span>即可提现</p>
+				</div>
+			</div>
+			<h3 class="headTitle"><span>收益记录</span></h3>
+			<div class="recordList">
+				<ul>
+					<li ng-repeat="record in recordLists" class="li">
+						{{record.time}} 得到了 <span>{{record.money}}</span> 元的{{record.text}}
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

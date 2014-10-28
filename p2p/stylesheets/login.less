@@ -1,0 +1,138 @@
+html,body{
+	max-width:640px; 
+	margin: auto;
+}
+#container{
+	width: 80%;
+	max-width: 512px;
+	margin: auto;
+}
+#header_bg{
+	width: 100%;
+	img{
+		max-width: 100%;
+		overflow: hidden;
+	}
+}
+#todayGetLimit{
+	h4{
+		color: #838383;
+		font-weight: bold;
+		letter-spacing: 2px;
+	}
+	#processBar{
+		width: 80%;
+		display: inline-block;
+		background: #ECCCC8;
+		height: 10px;
+		float: left;
+		border-radius:5px; 
+		margin-top:8px;
+		#currentProcess{
+			width: 50%;
+			border-radius:5px; 
+			height: 100%;
+			background: #F35842;
+		}
+	}
+	#leftPercent{
+		width: 20%;
+		display: inline-block;
+		color: #F35842;
+		text-align: center;
+		font-size: 20px;
+	}
+}
+#getBtnContainer{
+	margin-top: 10px;
+	#getBtn{
+		border-radius: 5px;
+		color: #fff;
+		height: 50px;
+		line-height: 50px;
+		text-align: center;
+		background: #4AC7B9;
+		font-size: 26px;
+	}
+}
+#getList{
+	margin-top: 10px;
+	border-top:1px dashed #737373;
+	li{
+		padding: 3px 0;
+	}
+}
+#loginContainer{
+	position: fixed;
+	top:0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 9;
+	background: rgba(0, 0, 0,0.5);
+	#loginDialog{
+		width: 80%;
+		margin-left: -40%;
+		left: 50%;
+		position: fixed;
+		top:50%;
+		margin-top: -161px;
+		text-align: center;
+		background: #fff;
+		border-radius: 10px;
+		.loginTip{
+			color: #E55A50;
+			font-size: 18px;
+		}
+		.sureBtnContainer{	
+			width: 80%;	
+			#sureBtn{
+				color: #fff;
+				background: #E55A50;
+				display: inline-block;
+				width: 80%;
+				height: 40px;
+				line-height: 40px;
+				margin-left: 22%;
+				border-radius: 5px;
+			}
+		}
+		.loginTip1{
+			padding-top: 20px;
+		}
+		.loginTip2{
+			padding: 10px 0 20px 0;
+		}
+		#userName,#userPassword,#sureUserPassword{
+			width: 80%;
+			height: 30px;
+			line-height: 30px;
+			text-indent: 10px;
+		}
+		.inputTip{
+			color: #E55A50;
+		}
+		#userPassword{
+			margin-top: 20px;
+		}
+		#sureUserPassword{
+			margin-top: 20px;
+		}
+		.sureBtnContainer{
+			margin:30px 0;
+		}
+	}
+}
+.showAnimation,.hideAnimation{
+	-webkit-transition:all linear 1s;
+	-moz-transition:all linear 1s;
+	-ms-transition:all linear 1s;
+	-o-transition:all linear 1s;
+	transition:all linear 1s;
+}
+.showAnimation{
+	opacity:0;
+}
+.hideAnimation{
+	opacity:0;
+}
