@@ -1,6 +1,15 @@
 'use strict';
-angular.module('personApp',[])
-.controller('PersonCtrl',function($scope){
+var loginPage = '/p2p/login.html';
+function redirectToLoginPage(){
+	window.location.href = loginPage;
+}
+angular.module('personApp',['myApp.checkLogin'])
+.controller('PersonCtrl',function($scope,checkLogin){
+	checkLogin.checkLogin(store.get('username'),store.get('password'),function(data){
+		if(data.code !== 0){
+			redirectToLoginPage();
+		}
+	});
 	var testData = {
 		username : 'Navy',
 		totalAsset : '653.13',//principal+sum_earnings
