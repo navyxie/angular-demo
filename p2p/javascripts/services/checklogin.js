@@ -23,4 +23,4 @@ angular.module('myApp.checkLogin',[])
 		}
 	}
 	
-})
+});

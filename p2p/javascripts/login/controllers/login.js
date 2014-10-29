@@ -3,7 +3,7 @@ var personPage = '/p2p/person.html';
 function redirectToPersonPage(){
 	window.location.href = personPage;
 }
-angular.module('loginApp',['myApp.checkLogin']).controller('LoginCtrl',function($scope,$rootScope,checkLogin){
+angular.module('loginApp').controller('LoginCtrl',function($scope,$rootScope,checkLogin){
 	var defaultPercent = '50%';
 	$rootScope.dialogState = 0;
 	$rootScope.currentProcess = $rootScope.leftPercent = defaultPercent;
@@ -81,7 +81,7 @@ angular.module('loginApp',['myApp.checkLogin']).controller('LoginCtrl',function(
 				//todo check username exists @leo; and redirect to person.html
 			}).error(function(data){
 				console.log(data);
-				if(data.error.code === 11000 && data.error.err.indexOf('insertDocument :: caused by :: 11000 E11000 duplicate key error index') !== -1){
+				if((data.error.code === 11000 && data.error.err.indexOf('insertDocument :: caused by :: 11000 E11000 duplicate key error index') !== -1) || data.error.status === 422){
 					alert('账号已存在，请更换');
 				}else{
 					alert('服务器繁忙，请重试');
@@ -117,4 +117,19 @@ angular.module('loginApp',['myApp.checkLogin']).controller('LoginCtrl',function(
 			$scope.showSignTip = 0;
 		}	
 	}
+}).controller('CashFlowCtrl',function($scope,getCashFlow){
+	$scope.cashFlowLists = [];
+	getCashFlow.getCashFlow({limit:5},function(data){
+		if(data.code === 0){
+			//todo
+			$scope.cashFlowLists = _.each(data.data,function(data){
+				var date = new Date(data.create_time);
+				data.showTime = date.getFullYear() + '-' + (1+date.getMonth()) + '-' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes();
+			 	return data;
+			});
+		}else{
+			console.log(data);
+			alert('获取现金流数据不成功');
+		}
+	})
 });

@@ -10,8 +10,10 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/login.css">
     <script type="text/javascript" src="libs/store.min.js"></script>
     <script type="text/javascript" src="libs/md5.min.js"></script>
+    <script type="text/javascript" src="libs/underscore-min.js"></script>
     <script type="text/javascript" src="libs/angular.min.js"></script> 
     <script type="text/javascript" src="javascripts/services/checklogin.js"></script>
+    <script type="text/javascript" src="javascripts/services/get_cashflow.js"></script>
     <script type="text/javascript" src="javascripts/login/app.js"></script> 
     <script type="text/javascript" src="javascripts/login/controllers/login.js"></script>    
 </head>
@@ -32,11 +34,10 @@
 		<div id="getBtnContainer" ng-controller="LoginCtrl">
 			<div id="getBtn" ng-click="showLoginDialog()">点击领取</div>
 		</div>
-		<ul id="getList">
-			<li>张先生于 10:55 领取了500元</li>
-			<li>张先生于 10:55 领取了100元</li>
-			<li>张先生于 10:55 领取了200元</li>
-			<li>张先生于 10:55 领取了300元</li>
+		<ul id="getList" ng-controller="CashFlowCtrl">
+			<li ng-repeat="cashFlowList in cashFlowLists">
+				{{cashFlowList.showTime}} 领取了{{cashFlowList.money}}元
+			</li>
 		</ul>
 	</div>
 	<div ng-show="dialogState" id="loginContainer" ng-include src=" 'views/dialog.html' " ng-click="closeDialog()"></div>

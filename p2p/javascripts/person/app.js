@@ -1,2 +1,2 @@
 'use strict';
-angular.module('personApp',[]);
+angular.module('personApp',['myApp.checkLogin']);

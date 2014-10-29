@@ -18,7 +18,7 @@
 <body ng-app="personApp">
 	<div id="container">
 		<div id="personContainer" ng-controller="PersonCtrl">
-			<div class="container1"><a class="openIncomeBtn" href="javascript:;" ng-click="openIncomeDialog()">如何提高收益？</a><span class="personSumary">{{personData.username}}的总资产 : <strong class="totalEarn">{{personData.totalAsset}}</strong>元</span></div>
+			<div class="container1"><a class="openIncomeBtn" ng-href="http://mp.weixin.qq.com/s?__biz=MjM5NjUzODA0OA==&mid=200642546&idx=1&sn=98544d72958d912cb813cd1afbe7cd29#rd" >如何提高收益？</a><span class="personSumary">{{personData.username}}的总资产 : <strong class="totalEarn">{{personData.totalAsset}}</strong>元</span></div>
 			<div class="container2">
 				<div class="tomorrowEarnContainer">
 					<h4>昨日收益(元)</h4>
@@ -63,6 +63,11 @@
 					</li>
 				</ul>
 			</div>
+			<div class="dialogContent" ng-show='signDialog'>
+				<p class="p1">今日已领金额 <span class="goldColor">&yen;{{todayCash}}</span></p>
+				<p class="p2">明天可领金额 <span class="goldColor">&yen;{{tomorrowCash}}</span></p>
+				<p class="btnP" ng-click="closeSignDialog()"><span>我知道了</span></p>
+			</div>
 		</div>
 		<div id="profitRecord" class="divBlock" ng-controller="RewardCtrl">
 			<div id="getCash">
@@ -82,5 +87,6 @@
 			</div>
 		</div>
 	</div>
+	<div ng-show="dialogShow" class="dialogMask"></div>
 </body>
 </html>

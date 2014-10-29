@@ -3,8 +3,9 @@ var loginPage = '/p2p/login.html';
 function redirectToLoginPage(){
 	window.location.href = loginPage;
 }
-angular.module('personApp',['myApp.checkLogin'])
-.controller('PersonCtrl',function($scope,checkLogin){
+angular.module('personApp')
+.controller('PersonCtrl',function($scope,checkLogin,$rootScope){
+	$rootScope.dialogShow = 0;
 	checkLogin.checkLogin(store.get('username'),store.get('password'),function(data){
 		if(data.code !== 0){
 			redirectToLoginPage();
@@ -18,7 +19,10 @@ angular.module('personApp',['myApp.checkLogin'])
 	};
 	$scope.personData = testData;
 })
-.controller('TaskListCtrl',function($scope,$http) {
+.controller('TaskListCtrl',function($scope,$http,$rootScope) {
+	$scope.signDialog = 0;
+	$scope.todayCash = 100;
+	$scope.tomorrowCash = 150;
 	$scope.dateList = [
 		{
 			date:'第一天',
@@ -42,8 +46,14 @@ angular.module('personApp',['myApp.checkLogin'])
 		}
 	]
 	$scope.signHander = function(){
-		alert(1);
+		$scope.signDialog = 1;
+		$rootScope.dialogShow = 1;
 	}
+	$scope.closeSignDialog = function(){
+		$scope.signDialog = 0;
+		$rootScope.dialogShow = 0;
+	}
+	
 })
 .controller('RewardCtrl',function($scope,$http) {
 	$scope.recordLists = [
