@@ -10,5 +10,6 @@
 	<div class="userPSW"><input ng-model="userPassword" type="password" id="userPassword" placeholder="密码" ng-trim="true" required="required" /><br /><span class="pswTip inputTip" ng-hide="pswTip">密码长度6-12字符</span></div>
 	<div class="sureBtnContainer"><a href="javascript:;" id="sureBtn" ng-click="register()">确认</a></div>
 	<p class="sureTip">我们承诺绝不会泄露您的个人信息</p>
-	<p class="loginSign" ng-click="changeLogin()">已有账号，赶快<span>{{showName}}</span>吧~</p>
+	<p class="loginSign" ng-click="changeLogin()">{{hasAccountText}}有账号，赶快<span>{{showName}}</span>吧~</p>
+	<div ng-click="closeDialog()" class="closeBtn"><img ng-src="images/closebtn.png" /></div>
 </div>

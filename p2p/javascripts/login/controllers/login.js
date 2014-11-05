@@ -1,9 +1,10 @@
 'use strict';
 var personPage = '/p2p/person.html';
+var totalAmount = 100000;
 function redirectToPersonPage(){
 	window.location.href = personPage;
 }
-angular.module('loginApp').controller('LoginCtrl',function($scope,$rootScope,checkLogin){
+angular.module('loginApp').controller('LoginCtrl',function($scope,$rootScope,checkLogin,getProduct){
 	var defaultPercent = '50%';
 	$rootScope.dialogState = 0;
 	$rootScope.currentProcess = $rootScope.leftPercent = defaultPercent;
@@ -18,8 +19,25 @@ angular.module('loginApp').controller('LoginCtrl',function($scope,$rootScope,che
 			redirectToPersonPage();
 		}
 	});
+	getProduct.getProduct({limit:1},function(data){
+		if(data.code === 0){
+			var amountData = data.data[0];
+			if(amountData.amount_total <= 0){
+				$rootScope.currentProcess = $rootScope.leftPercent = "0%";
+			}else{
+				var floatLeft = amountData.amount_total/totalAmount;
+				floatLeft = floatLeft/2 + 0.5;
+				floatLeft = (floatLeft.toFixed(3))*100;
+				floatLeft = floatLeft.toFixed(1);
+				$rootScope.currentProcess = $rootScope.leftPercent = ''+floatLeft+'%';
+			}		
+		}else{
+			console.log(data);
+			alert('获取产品信息失败');
+		}
+	})
 }).controller('LoginDialogCtrl',function($scope,$rootScope,$http,checkLogin) {
-	var text1 = '登录',text2 = '注册';
+	var text1 = '登录',text2 = '注册',text3 = '已',text4 = '没';
 	var isRegistered = false;
 	var registerTip = "";
 	var isGetUserName = false;
@@ -29,7 +47,11 @@ angular.module('loginApp').controller('LoginCtrl',function($scope,$rootScope,che
 	$scope.showRegisterTip = 1;
 	$scope.showSignTip = 0;
 	$scope.showName = text1;
+	$scope.hasAccountText = text3;
 	$scope.checkName = function(){
+		if($scope.showName === text2){
+			return;
+		}
 		$http({
 			url:'/api/aimibao_users',
 			method:'GET',
@@ -70,12 +92,11 @@ angular.module('loginApp').controller('LoginCtrl',function($scope,$rootScope,che
 		}
 		if($scope.showName === text1){
 			$http({
-				url:'/api/aimibao_users',
+				url:'/api/aimibao_users/create_user',
 				method:'POST',
 				data:{username:$scope.userName,password:md5($scope.userPassword)}
-			}).success(function(data){			
-				store.set('username',$scope.userName);
-				store.set('password',md5($scope.userPassword));
+			}).success(function(data){
+				setUserInfoToLocal($scope.userName,md5($scope.userPassword));			
 				$scope.resetDialog();
 				redirectToPersonPage();
 				//todo check username exists @leo; and redirect to person.html
@@ -90,13 +111,19 @@ angular.module('loginApp').controller('LoginCtrl',function($scope,$rootScope,che
 		}else if($scope.showName === text2){
 			checkLogin.checkLogin($scope.userName,md5($scope.userPassword),function(data){
 				if(data.code === 0){
+					setUserInfoToLocal($scope.userName,md5($scope.userPassword));
 					redirectToPersonPage();
 				}else{
 					console.log('login error:',data);
-					alert(data.msg);
+					alert('请确认账号和密码是否正确');
+					// alert(data.msg);
 				}
 			})
 		}	
+	}
+	function setUserInfoToLocal(username,password){
+		store.set('username',username);
+		store.set('password',password);
 	}
 	$scope.resetDialog = function(){
 		$rootScope.dialogState = 0;
@@ -111,15 +138,20 @@ angular.module('loginApp').controller('LoginCtrl',function($scope,$rootScope,che
 			$scope.showName = text2;
 			$scope.showRegisterTip = 0;
 			$scope.showSignTip = 1;
+			$scope.hasAccountText = text4;
 		}else{
 			$scope.showName = text1;
 			$scope.showRegisterTip = 1;
 			$scope.showSignTip = 0;
+			$scope.hasAccountText = text3;
 		}	
+		$scope.userNameTip = $scope.pswTip = 1;
+		ableRegister = true;
+		isRegistered = false;
 	}
 }).controller('CashFlowCtrl',function($scope,getCashFlow){
 	$scope.cashFlowLists = [];
-	getCashFlow.getCashFlow({limit:5},function(data){
+	getCashFlow.getCashFlow({limit:5,order:'create_time DESC',},function(data){
 		if(data.code === 0){
 			//todo
 			$scope.cashFlowLists = _.each(data.data,function(data){

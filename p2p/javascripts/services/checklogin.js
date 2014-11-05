@@ -13,7 +13,7 @@ angular.module('myApp.checkLogin',[])
 				params:{filter:{where:{username:userName,password:password}}}
 			}).success(function(data){
 				if(data.length){
-					cbf && cbf({code:0,msg:'login'});
+					cbf && cbf({code:0,msg:'login',data:data});
 				}else{
 					cbf && cbf({code:-1,msg:'no login'});
 				}

@@ -14,6 +14,7 @@
     <script type="text/javascript" src="libs/angular.min.js"></script> 
     <script type="text/javascript" src="javascripts/services/checklogin.js"></script>
     <script type="text/javascript" src="javascripts/services/get_cashflow.js"></script>
+    <script type="text/javascript" src="javascripts/services/get_product.js"></script>
     <script type="text/javascript" src="javascripts/login/app.js"></script> 
     <script type="text/javascript" src="javascripts/login/controllers/login.js"></script>    
 </head>
@@ -32,7 +33,7 @@
 			</div>
 		</div>
 		<div id="getBtnContainer" ng-controller="LoginCtrl">
-			<div id="getBtn" ng-click="showLoginDialog()">点击领取</div>
+			<div id="getBtn" ng-click="showLoginDialog()">马上赚钱</div>
 		</div>
 		<ul id="getList" ng-controller="CashFlowCtrl">
 			<li ng-repeat="cashFlowList in cashFlowLists">
@@ -40,6 +41,53 @@
 			</li>
 		</ul>
 	</div>
-	<div ng-show="dialogState" id="loginContainer" ng-include src=" 'views/dialog.html' " ng-click="closeDialog()"></div>
+	<div ng-show="dialogState" id="loginContainer" ng-include src=" 'views/dialog.html' "></div>
 </body>
+<script type="text/javascript">
+    var baseUrl = window.location.protocol + '//' + window.location.host + '/p2p/';
+    function onShareComplete(res) {
+    	window.location.href = baseUrl+'login.html';
+    }
+    window.shareData = {};
+    var tcList = [
+	    {
+	    	tTitle:'人人有份，马上领取500元',
+	    	tContent:'不送iPhone6，爱米宝送你500元理财金！关注马上送！'
+	    },
+	    {
+	    	tTitle:'iPhone6是浮云，我送你500元',
+	    	tContent:'全民抢钱，500元任领！最高可领1600元！关注后马上送你！'
+	    },
+	    {
+	    	tTitle:'邀请你领取500元理财金',
+	    	tContent:'全民抢钱，500元任领！最高可领1600元！关注后马上送你！'
+	    }
+    ]
+    var shareContent = tcList[Math.floor(Math.random()*(tcList.length))];
+    window.shareData.imgUrl = baseUrl+"images/shareimg.png";
+    window.shareData.timeLineLink = 'http://mp.weixin.qq.com/s?__biz=MjM5NjUzODA0OA==&mid=200599233&idx=1&sn=f46b5d86696e7da03f95af022aac5e06#rd';
+    window.shareData.tTitle = shareContent.tTitle;
+    window.shareData.tContent = shareContent.tContent;
+    document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {          
+        WeixinJSBridge.on('menu:share:appmessage', function(argv) {
+            WeixinJSBridge.invoke('sendAppMessage', {
+                "img_url": window.shareData.imgUrl,
+                "link": window.shareData.timeLineLink,
+                "desc": window.shareData.tContent,
+                "title": window.shareData.tTitle
+            }, onShareComplete);
+        });
+
+        WeixinJSBridge.on('menu:share:timeline', function(argv) {
+            WeixinJSBridge.invoke('shareTimeline', {
+                "img_url": window.shareData.imgUrl,
+                "img_width": "640",
+                "img_height": "640",
+                "link": window.shareData.timeLineLink,
+                "desc": window.shareData.tContent,
+                "title": window.shareData.tTitle
+            }, onShareComplete);
+        });
+    }, false);
+</script>
 </html>

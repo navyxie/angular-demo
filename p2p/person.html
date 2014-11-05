@@ -10,15 +10,19 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/person.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/login.css">
     <script type="text/javascript" src="libs/store.min.js"></script>
+    <script type="text/javascript" src="libs/underscore-min.js"></script>
+    <script type="text/javascript" src="libs/date-utils.min.js"></script>
     <script type="text/javascript" src="libs/angular.min.js"></script> 
     <script type="text/javascript" src="javascripts/services/checklogin.js"></script>
+    <script type="text/javascript" src="javascripts/services/get_user_asset.js"></script>
+    <script type="text/javascript" src="javascripts/services/get_cashflow.js"></script>
     <script type="text/javascript" src="javascripts/person/app.js"></script> 
     <script type="text/javascript" src="javascripts/person/controllers/person.js"></script>    
 </head>
 <body ng-app="personApp">
 	<div id="container">
 		<div id="personContainer" ng-controller="PersonCtrl">
-			<div class="container1"><a class="openIncomeBtn" ng-href="http://mp.weixin.qq.com/s?__biz=MjM5NjUzODA0OA==&mid=200642546&idx=1&sn=98544d72958d912cb813cd1afbe7cd29#rd" >如何提高收益？</a><span class="personSumary">{{personData.username}}的总资产 : <strong class="totalEarn">{{personData.totalAsset}}</strong>元</span></div>
+			<div class="container1"><a class="openIncomeBtn" ng-href="http://mp.weixin.qq.com/s?__biz=MjM5NjUzODA0OA==&mid=200642546&idx=1&sn=98544d72958d912cb813cd1afbe7cd29#rd" >如何提高收益？</a><span class="personSumary">{{personData.username}}的总资产 : <strong class="totalEarn">{{totalAsset}}</strong>元</span></div>
 			<div class="container2">
 				<div class="tomorrowEarnContainer">
 					<h4>昨日收益(元)</h4>
@@ -31,62 +35,135 @@
 				<div class="line line1"></div>
 				<div class="line line2"></div>
 			</div>
-		</div>
-		<div id="newHandReward" class="divBlock" ng-controller="RewardCtrl">
-			<h3 class="headTitle"><span>新手奖励</span></h3>
-			<div class="taskList taskListShare">
-				<span class="col col1">任务一</span>
-				<span class="col col2"><em>&yen;100</em>分享后奖励</span>
-				<span class="col col3" ng-click="getShareCoin()">领取</span>
-			</div>
-			<div class="taskList taskListSign">
-				<span class="col col1">任务二</span>
-				<span class="col col2"><em>&yen;100</em>签到后奖励</span>
-				<span class="col col3" ng-click="getSignCoin()">领取</span>
-			</div>
-		</div>
-		<div id="signIn" class="divBlock" ng-controller="TaskListCtrl">
-			<h3 class="headTitle"><span>连续签到，天天领</span></h3>
-			<div class="signTaskList">
-				<ul>
-					<li ng-repeat="task in dateList" class="list">
-						<div class="listContent">
-							<span class="date">{{task.date}}</span>
-							<span class="money">{{task.money}}</span>
-						</div>
-					</li>
-					<li class="list signList" ng-click="signHander()">
-						<div class="listContent signBtn">
-							<span class="signBg">点击</span>
-							<span class="signBg">签到</span>
-						</div>
-					</li>
-				</ul>
-			</div>
-			<div class="dialogContent" ng-show='signDialog'>
-				<p class="p1">今日已领金额 <span class="goldColor">&yen;{{todayCash}}</span></p>
-				<p class="p2">明天可领金额 <span class="goldColor">&yen;{{tomorrowCash}}</span></p>
-				<p class="btnP" ng-click="closeSignDialog()"><span>我知道了</span></p>
-			</div>
-		</div>
-		<div id="profitRecord" class="divBlock" ng-controller="RewardCtrl">
-			<div id="getCash">
-				<div class="getCashBtnContent disableClick"><span ng-click="getCashBtn()">提现</span></div>
-				<div class="getCashText">
-					<p>你的收益为<span>{{cashVal}}元</span></p>
-					<p>收益满<span>3元</span>即可提现</p>
+			<div ng-show="showGetCashDialog" class="showGetCashDialog">
+				<div class="content">
+					<h3>总收益(元)</h3>
+					<p class="totalEarnDialog"><span class="cashTip">单笔提现一次最高10元</span><span class="totalEarnSpan">{{personData.sumEarning}}</span></p>
+					<p class="inputP inputPCash"><input type="number" ng-model="getCashInput" placeholder="请输入提取金额" ng-blur="checkGetCash()" /><span class="getAllBtn" ng-click="getAllEarn()">提取全部</span></p>
+					<div class="mobileTip redTextColor" ng-show="getCashTip">提现金额必须是数字</div>
+					<p class="inputP"><input ng-model="getAlipayAcount" placeholder="请输入支付宝账号" ng-blur="checkEmail()" /></p>
+					<div class="mobileTip redTextColor" ng-show="alipayAcountTip">支付宝账号必须是手机号或邮箱</div>
+					<p class="inputP"><input ng-model="getUserMobile" placeholder="请输入手机号" ng-blur="checkMobile()" /></p>
+					<div class="mobileTip redTextColor" ng-show="mobileTip">手机号码不正确</div>
+					<p class="btnP">
+						<span class="cancelBtn" ng-click="closeGetCashDialog()">取消</span>
+						<span class="okBtn" ng-click="updateGetCash()">确认提交</span>
+					</p>
 				</div>
 			</div>
-			<h3 class="headTitle"><span>收益记录</span></h3>
-			<div class="recordList">
-				<ul>
-					<li ng-repeat="record in recordLists" class="li">
-						{{record.time}} 得到了 <span>{{record.money}}</span> 元的{{record.text}}
-					</li>
-				</ul>
+		</div>
+		<div ng-controller="TaskListCtrl">
+			<div id="newHandReward" class="divBlock">
+				<h3 class="headTitle"><span>新手奖励</span></h3>
+				<div class="taskList taskListShare">
+					<span class="col col1">任务一</span>
+					<span class="col col2" ng-class="{true:'highLightTask',false:'disHighLightTask'}[isActiveShare]"><em>&yen;100</em>分享后奖励</span>
+					<span class="col col3" ng-class="{true:'enableClickGreen',false:'disableClick'}[isActiveShare]" ng-click="getShareCoin()">领取</span>
+				</div>
+				<div class="taskList taskListSign">
+					<span class="col col1">任务二</span>
+					<span class="col col2" ng-class="{true:'highLightTask',false:'disHighLightTask'}[isActiveSign]"><em>&yen;100</em>签到后奖励</span>
+					<span class="col col3" ng-class="{true:'enableClickGreen',false:'disableClick'}[isActiveSign]" ng-click="getSignCoin()">领取</span>
+				</div>
 			</div>
+			<div id="signIn" class="divBlock">
+				<h3 class="headTitle"><span>连续签到，天天领</span></h3>
+				<div class="signTaskList" ng-show="showTaskList">
+					<ul>
+						<li ng-repeat="task in dateList" class="list">
+							<div class="listContent">
+								<span class="date">{{task.date}}</span>
+								<span class="money">{{task.money}}</span>
+								<span class="showSignImg" ng-show="task.showSignImg"><img src="images/signed.png" /></span>
+							</div>
+						</li>
+						<li class="list signList" ng-click="signHander()" id="signBtnRed">
+							<div class="listContent signBtn">
+								<span class="signBg">点击</span>
+								<span class="signBg">签到</span>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="dialogContent" ng-show='signDialog'>
+					<p class="p1">今日已领金额 <span class="goldColor">&yen;{{todayCash}}</span></p>
+					<p class="p2">明天可领金额 <span class="goldColor">&yen;{{tomorrowCash}}</span></p>
+					<p class="btnP" ng-click="closeSignDialog()"><span>我知道了</span></p>
+				</div>
+			</div>
+			<div id="profitRecord" class="divBlock">
+				<div id="getCash">
+					<div ng-class="{true: 'enableClick', false: 'disableClick'}[isActiveGetCash]" class="getCashBtnContent" ng-click="getCashBtn()"><span>提现</span></div>
+					<div class="getCashText">
+						<p>你的收益为<span>{{cashVal}}元</span></p>
+						<p>收益满<span>3元</span>即可提现</p>
+					</div>
+				</div>
+				<h3 class="headTitle"><span>收益记录</span></h3>
+				<div class="recordList">
+					<ul>
+						<li ng-repeat="record in recordLists" class="li">
+							{{record.showTime}} {{record.type == 4 ? "提现了" : "赚到了"}} <span>{{record.money}}</span> 元
+						</li>
+					</ul>
+				</div>
+			</div>			
 		</div>
 	</div>
 	<div ng-show="dialogShow" class="dialogMask"></div>
+	<div ng-show="showShareTip" class="showShareTip" ng-click="showShareTip = !showShareTip">
+		<div><img ng-src="images/sharetip.png" /></div>
+	</div>
 </body>
+<script type="text/javascript">
+    var baseUrl = window.location.protocol + '//' + window.location.host + '/p2p/';
+    function onShareComplete(res) {
+    	if(store.get('userClickShareBtn')){
+    		store.remove('userClickShareBtn');
+    		store.set('uploadshare',1);
+    	}
+    	window.location.href = baseUrl+'person.html';
+    }
+    window.shareData = {};
+    var tcList = [
+	    {
+	    	tTitle:'人人有份，马上领取500元',
+	    	tContent:'不送iPhone6，爱米宝送你500元理财金！关注马上送！'
+	    },
+	    {
+	    	tTitle:'iPhone6是浮云，我送你500元',
+	    	tContent:'全民抢钱，500元任领！最高可领1600元！关注后马上送你！'
+	    },
+	    {
+	    	tTitle:'邀请你领取500元理财金',
+	    	tContent:'全民抢钱，500元任领！最高可领1600元！关注后马上送你！'
+	    }
+    ]
+    var shareContent = tcList[Math.floor(Math.random()*(tcList.length))];
+    window.shareData.imgUrl = baseUrl+"images/shareimg.png";
+    window.shareData.timeLineLink = 'http://mp.weixin.qq.com/s?__biz=MjM5NjUzODA0OA==&mid=200599233&idx=1&sn=f46b5d86696e7da03f95af022aac5e06#rd';
+    window.shareData.tTitle = shareContent.tTitle;
+    window.shareData.tContent = shareContent.tContent;
+    document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {          
+        WeixinJSBridge.on('menu:share:appmessage', function(argv) {
+            WeixinJSBridge.invoke('sendAppMessage', {
+                "img_url": window.shareData.imgUrl,
+                "link": window.shareData.timeLineLink,
+                "desc": window.shareData.tContent,
+                "title": window.shareData.tTitle
+            }, onShareComplete);
+        });
+
+        WeixinJSBridge.on('menu:share:timeline', function(argv) {
+            WeixinJSBridge.invoke('shareTimeline', {
+                "img_url": window.shareData.imgUrl,
+                "img_width": "640",
+                "img_height": "640",
+                "link": window.shareData.timeLineLink,
+                "desc": window.shareData.tContent,
+                "title": window.shareData.tTitle
+            }, onShareComplete);
+        });
+    }, false);
+</script>
 </html>
